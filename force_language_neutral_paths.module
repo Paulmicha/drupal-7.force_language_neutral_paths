@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * @file
+ * Force the language of aliases to neutral so that they are generated for all languages.
+ * @see https://www.drupal.org/node/1234924#comment-9235023
+ * @see https://www.drupal.org/node/1234924#comment-9296037
+ */
+
+
+/**
+ * Implements hook_pathauto_alias_alter().
+ * Set the language of our alias to neutral so that the alias is generated for all languages.
+ * We do not force language neutral if we have a node type being managed by other 
+ * translation modules so we return early.
+*/
+function force_language_neutral_paths_pathauto_alias_alter(&$alias, array &$context) {
+  if ((module_exists('i18n_node')
+    && i18n_node_type_enabled($context['data']['node']->type))
+    || (module_exists('entity_translation')
+    && entity_translation_node_supported_type($context['data']['node']->type))) {
+    return;
+  }
+  $context['language'] = LANGUAGE_NONE;
+}
+
+
+/**
+ * Implements hook_path_insert().
+ */
+function force_language_neutral_paths_path_insert($path) {
+  _force_language_neutral_paths_path_language_fix($path['pid']);
+}
+
+
+/**
+ * Implements hook_path_update().
+ */
+function force_language_neutral_paths_path_update($path) {
+  _force_language_neutral_paths_path_language_fix($path['pid']);
+}
+
+
+/**
+ * Fixing a given path id.
+ */
+function _force_language_neutral_paths_path_language_fix($pid) {
+  db_update('url_alias')
+    ->fields(array('language' => LANGUAGE_NONE))
+    ->condition('pid', $pid)
+    ->execute();
+}
+
+

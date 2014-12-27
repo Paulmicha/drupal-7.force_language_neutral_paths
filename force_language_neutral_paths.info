@@ -1,0 +1,4 @@
+name = Force Language Neutral Paths
+description = Force the language of aliases to neutral so that they are generated for all languages.
+core = 7.x
+dependencies[] = pathauto
