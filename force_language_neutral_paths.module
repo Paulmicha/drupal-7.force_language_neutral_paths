@@ -19,7 +19,7 @@ function force_language_neutral_paths_pathauto_alias_alter(&$alias, array &$cont
     && module_exists('i18n_node')
     && i18n_node_type_enabled(@$context['data'][$context['module']]->type))
     || (module_exists('entity_translation')
-    && entity_translation_node_supported_type($context['data'][$context['module']]->type))) {
+    && entity_translation_node_supported_type(@$context['data'][$context['module']]->type))) {
     return;
   }
   $context['language'] = LANGUAGE_NONE;
