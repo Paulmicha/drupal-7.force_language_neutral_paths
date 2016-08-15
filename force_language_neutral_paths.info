@@ -1,4 +1,4 @@
 name = Force Language Neutral Paths
-description = Force the language of aliases to neutral so that they are generated for all languages.
+description = Make sure they are generated and available for all languages. Also resets users, nodes, and taxonomy terms aliases language on install.
 core = 7.x
 dependencies[] = pathauto

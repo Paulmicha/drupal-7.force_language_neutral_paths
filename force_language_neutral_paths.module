@@ -1,17 +1,19 @@
 <?php
-
 /**
  * @file
- * Force the language of aliases to neutral so that they are generated for all languages.
+ * Force the language of aliases to neutral.
+ *
+ * Make sure they are generated and available for all languages.
+ *
  * @see https://www.drupal.org/node/1234924#comment-9235023
  * @see https://www.drupal.org/node/1234924#comment-9296037
  */
 
-
 /**
  * Implements hook_pathauto_alias_alter().
+ *
  * Set the language of our alias to neutral so that the alias is generated for all languages.
- * We do not force language neutral if we have a node type being managed by other 
+ * We do not force language neutral if we have a node type being managed by other
  * translation modules so we return early.
 */
 function force_language_neutral_paths_pathauto_alias_alter(&$alias, array &$context) {
@@ -51,5 +53,3 @@ function _force_language_neutral_paths_path_language_fix($pid) {
     ->condition('pid', $pid)
     ->execute();
 }
-
-

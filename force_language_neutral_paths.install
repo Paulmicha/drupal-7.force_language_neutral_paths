@@ -1,0 +1,38 @@
+<?php
+/**
+ * @file
+ * Force the language of aliases to neutral at install.
+ *
+ * @todo Implement in batch and move to back-office with options.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function force_language_neutral_paths_install() {
+  $types_to_reset = array('user');
+  if (module_exists('i18n_node')) {
+    $types_to_reset[] = 'node';
+  }
+  if (module_exists('i18n_taxonomy')) {
+    $types_to_reset[] = 'taxonomy/term';
+  }
+  foreach ($types_to_reset as $type) {
+    $num_updated = db_update('url_alias')
+      ->fields(array('language' => LANGUAGE_NONE))
+      ->condition('language', LANGUAGE_NONE, '!=')
+      ->condition('source', $type . '/%', 'LIKE')
+      ->execute();
+    if ($num_updated > 0) {
+      drupal_set_message(t('@num "@type" aliases were reset to language neutral.', array(
+        '@type' => $type,
+        '@num' => $num_updated,
+      )));
+    }
+    else {
+      drupal_set_message(t('No "@type" aliases were updated.', array(
+        '@type' => $type,
+      )));
+    }
+  }
+}
